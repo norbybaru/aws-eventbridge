@@ -1,12 +1,12 @@
 import  Fastify from "fastify";
 import Pino from "pino";
-import AppRoutes from "./app";
+import app from "./app";
 
 const server = Fastify({
     logger: Pino({ level: 'info' })
 });
 
-server.register(AppRoutes)
+server.register(app)
 const start = async () => {
     try {
         await server.listen({port: 7000});

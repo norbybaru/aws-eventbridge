@@ -1,20 +1,17 @@
-import { 
-    FastifyRequest,
-    FastifyInstance, 
-    FastifyPluginOptions, 
-    FastifyPluginAsync, 
-    FastifyReply
-  } from 'fastify';
+import AutoLoad, {AutoloadPluginOptions} from '@fastify/autoload'
+import {FastifyPluginAsync} from 'fastify'
+import {join} from 'path'
 
-  const AppRoutes: FastifyPluginAsync = async (fastify: FastifyInstance, options: FastifyPluginOptions): Promise<void> => {
-    fastify.get('/health-check', {}, (request: FastifyRequest, reply: FastifyReply) => {
-        try {
-            return reply.send({status: 'ok', timestamp: new Date().toISOString()})
-        } catch (error) {
-            request.log.error(error);
-            return reply.send(500);
-        }
-    })
-  }
+export type AppOptions = {
+  // Place your custom options for app below here.
+} & Partial<AutoloadPluginOptions>
 
-  export default AppRoutes;
+const app: FastifyPluginAsync<AppOptions> = async (fastify, opts): Promise<void> => {
+  void fastify.register(AutoLoad, {
+    dir: join(__dirname, 'routes'),
+    options: opts
+  })
+}
+
+export default app
+export {app}
