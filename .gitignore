@@ -1,4 +1,5 @@
 /.vscode
+.aws-sam
 build
 dist
 node_modules
