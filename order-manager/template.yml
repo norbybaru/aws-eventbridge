@@ -23,3 +23,9 @@ Outputs:
   AppEventAPI:
     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
     Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
+  OrderManagerFunction:
+    Description: "OrderManagerFunction ARN"
+    Value: !GetAtt OrderManagerFunction.Arn
+  OrderManagerFunctionIamRole:
+    Description: "Implicit IAM Role created for OrderManagerFunction"
+    Value: !GetAtt OrderManagerFunctionRole.Arn
