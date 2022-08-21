@@ -9,10 +9,12 @@ import {
   const Routes: FastifyPluginAsync = async (fastify: FastifyInstance, options: FastifyPluginOptions): Promise<void> => {
     fastify.get('/', {}, (request: FastifyRequest, reply: FastifyReply) => {
         try {
-            return reply.send({status: 'ok', app: 'app.bluePizza.com', timestamp: new Date().toISOString()})
+            const event = request.awsLambda.event;
+            request.log.info('blue pizza received order event')
+            request.log.info(event);
         } catch (error) {
             request.log.error(error);
-            return reply.send(500);
+            return reply.status(500).send(JSON.stringify(error));
         }
     })
   }

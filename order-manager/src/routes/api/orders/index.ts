@@ -28,7 +28,7 @@ import { PutEventsCommand, PutEventsRequest } from "@aws-sdk/client-eventbridge"
             return reply.status(201).send({data})
         } catch (error) {
             request.log.error(error);
-            return reply.send(500);
+            return reply.status(500).send(JSON.stringify(error));
         }
     })
   }

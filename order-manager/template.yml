@@ -9,6 +9,13 @@ Resources:
       Runtime: nodejs16.x
       MemorySize: 128
       Timeout: 500
+      Policies:
+        - Statement:
+            - Sid: EventBridgePutEvents 
+              Effect: "Allow"
+              Action: 
+                - "events:PutEvents"
+              Resource: "*"
       Events:
         AppEventAPI:
           Type: HttpApi

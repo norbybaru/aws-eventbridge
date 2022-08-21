@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  thaiFoodFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: dist/lambda.handler
+      PackageType: Zip
+      Runtime: nodejs16.x
+      Events:
+        Trigger:
+          Type: CloudWatchEvent
+          Properties:
+            Pattern:
+              source:
+                - 'app.orderManager.com'
+              detail-type:
+                - 'order'
+              detail:
+                restaurant:
+                  - 'thai-food'
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  thaiFoodFunction:
+    Description: "thaiFoodFunction ARN"
+    Value: !GetAtt thaiFoodFunction.Arn
+  thaiFoodFunctionIamRole:
+    Description: "Implicit IAM Role created for thaiFoodFunction"
+    Value: !GetAtt thaiFoodFunctionRole.Arn
