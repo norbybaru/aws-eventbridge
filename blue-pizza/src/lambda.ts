@@ -1,4 +1,3 @@
-
 const awsLambdaFastify = require("@fastify/aws-lambda");
 import fastify from "fastify";
 import app from "./app";
