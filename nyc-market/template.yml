@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Create an EventBridge rule and API destination to route events to an external API
+
+Parameters:
+  # use https://webhook.site/ to test webhook
+  NYCMarketDestinationURL:
+    Type: String
+
+Resources:
+  NYCMarketConnection:
+    Type: AWS::Events::Connection
+    Properties:
+      AuthorizationType: API_KEY
+      Description: 'Connection with an API key'
+      AuthParameters:
+        ApiKeyAuthParameters:
+          ApiKeyName: ApiKeyName
+          ApiKeyValue: NYCMarketApiKeyValue
+
+  NYCMarketApiDestination:
+    Type: AWS::Events::ApiDestination
+    Properties:
+      Name: 'NYCMarketOrderWebhookURL'
+      ConnectionArn: !GetAtt NYCMarketConnection.Arn
+      InvocationEndpoint: !Ref NYCMarketDestinationURL
+      HttpMethod: POST
+      InvocationRateLimitPerSecond: 10
+
+  EventBridgeTargetRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - events.amazonaws.com
+            Action:
+              - sts:AssumeRole      
+      Policies:
+        - PolicyName: AllowAPIdestinationAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: 'events:InvokeApiDestination'
+                Resource: !GetAtt NYCMarketApiDestination.Arn
+  
+  NYCMarketEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "NYCMarket EventRule"
+      EventPattern:
+        source:
+          - 'app.orderManager.com'
+        detail-type:
+          - 'order'
+        detail:
+          restaurant:
+            - 'nyc-market'
+      Targets: 
+        - Arn: !GetAtt NYCMarketApiDestination.Arn
+          RoleArn: !GetAtt EventBridgeTargetRole.Arn
+          Id: "NYCMarketApiDestination"
+
+Outputs:
+  # https://serverlessland.com/patterns/eventbridge-api-destinations
+  NYCMarketConnectionName:
+    Value: !Ref NYCMarketConnection
+  NYCMarketConnectionArn:
+    Value: !GetAtt NYCMarketConnection.Arn        
+
+  NYCMarketApiDestinationName:
+    Value: !Ref NYCMarketApiDestination
+  NYCMarketApiDestinationArn:
+    Value: !GetAtt NYCMarketApiDestination.Arn
+
+  EventBridgeTargetRoleArn:
+    Value: !GetAtt EventBridgeTargetRole.Arn
