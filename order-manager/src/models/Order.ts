@@ -4,7 +4,7 @@ import { RouteShorthandOptions } from "fastify";
 const OrderSchema = {
     type: 'object',
     properties: {
-        restaurant: { enum: ['blue-pizza', 'thai-food']},
+        restaurant: { enum: ['blue-pizza', 'thai-food', 'nyc-market']},
         customer: {
             type: 'object',
             properties: {

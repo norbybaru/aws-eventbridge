@@ -48,10 +48,29 @@ Resources:
                 Action: 'events:InvokeApiDestination'
                 Resource: !GetAtt NYCMarketApiDestination.Arn
   
+  NYCMarketDLQueue:
+    Type: AWS::SQS::Queue
+  
+  NYCMarketDLQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+        - !Ref NYCMarketDLQueue
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action: 'sqs:sendMessage'
+            Resource: !GetAtt NYCMarketDLQueue.Arn
+            Principal:
+              Service: events.amazonaws.com
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !GetAtt NYCMarketEventRule.Arn
+
   NYCMarketEventRule:
     Type: AWS::Events::Rule
     Properties:
-      Description: "NYCMarket EventRule"
+      Description: "API destination url EventRule"
       EventPattern:
         source:
           - 'app.orderManager.com'
@@ -64,7 +83,35 @@ Resources:
         - Arn: !GetAtt NYCMarketApiDestination.Arn
           RoleArn: !GetAtt EventBridgeTargetRole.Arn
           Id: "NYCMarketApiDestination"
+          DeadLetterConfig:
+            Arn: !GetAtt NYCMarketDLQueue.Arn
+          RetryPolicy:
+            MaximumEventAgeInSeconds: 60
+            MaximumRetryAttempts: 4
 
+  NYCMarketDLQFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: dist/lambda.handler
+      PackageType: Zip
+      Runtime: nodejs16.x
+      Timeout: 10
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref NYCMarketDLQTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref NYCMarketDLQTable
+      Events:
+        DLQSQSEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt NYCMarketDLQueue.Arn
+            BatchSize: 1
+
+  NYCMarketDLQTable:
+    Type: AWS::Serverless::SimpleTable
+  
 Outputs:
   # https://serverlessland.com/patterns/eventbridge-api-destinations
   NYCMarketConnectionName:
@@ -79,3 +126,10 @@ Outputs:
 
   EventBridgeTargetRoleArn:
     Value: !GetAtt EventBridgeTargetRole.Arn
+
+  NYCMarketDLQFunction:
+    Description: "NYCMarketDLQFunction ARN"
+    Value: !GetAtt NYCMarketDLQFunction.Arn
+  NYCMarketDLQFunctionIamRole:
+    Description: "Implicit IAM Role created for NYCMarketDLQFunction"
+    Value: !GetAtt NYCMarketDLQFunctionRole.Arn

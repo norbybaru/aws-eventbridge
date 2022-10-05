@@ -1,0 +1,20 @@
+{
+    "Records": [
+      {
+        "messageId": "19dd0b57-b21e-4ac1-bd88-01bbb068cb78",
+        "receiptHandle": "MessageReceiptHandle",
+        "body": "{\"version\":\"0\",\"id\":\"b644d760-f02e-50ca-d507-f1937d37940a\",\"detail-type\":\"order\",\"source\":\"app.orderManager.com\",\"account\":\"973932482043\",\"time\":\"2022-10-04T13:30:06Z\",\"region\":\"eu-west-1\",\"resources\":[],\"detail\":{\"restaurant\":\"nyc-market\",\"order\":{\"item\":\"noodles\",\"price\":1022220},\"customer\":{\"name\":\"Jane Doe\",\"email\":\"jane@exmaple.com\"}}}",
+        "attributes": {
+          "ApproximateReceiveCount": "1",
+          "SentTimestamp": "1523232000000",
+          "SenderId": "123456789012",
+          "ApproximateFirstReceiveTimestamp": "1523232000001"
+        },
+        "messageAttributes": {},
+        "md5OfBody": "7b270e59b47ff90a553787216d55d91d",
+        "eventSource": "aws:sqs",
+        "eventSourceARN": "arn:aws:sqs:us-east-1:123456789012:MyQueue",
+        "awsRegion": "us-east-1"
+      }
+    ]
+  }

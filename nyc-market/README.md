@@ -1,19 +1,23 @@
-# Create an EventBridge rule and API destination to route events to an external API
+# Getting Started with [Fastify-CLI](https://www.npmjs.com/package/fastify-cli)
+This project was bootstrapped with Fastify-CLI.
 
-This pattern configures an EventRule rule that routes to an API Destinations target. It configures a Connection, which contains the authorization for the API endpoint, and the API, which contains the URL, http method, and other configuration information.
+## Available Scripts
 
-## Deploy
-```sh
-sam deploy --guide
-```
+In the project directory, you can run:
 
-## Cleanup
-### Delete Stack
-```sh
-sam delete --stack-name STACK_NAME.
-```
+### `npm run dev`
 
-### Confirm Stack been deleted
-```sh
- aws cloudformation list-stacks --query "StackSummaries[?contains(StackName,'STACK_NAME')].StackStatus"
-```
+To start the app in dev mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+### `npm start`
+
+For production mode
+
+### `npm run test`
+
+Run the test cases.
+
+## Learn More
+
+To learn Fastify, check out the [Fastify documentation](https://www.fastify.io/docs/latest/).
