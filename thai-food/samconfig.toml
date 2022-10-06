@@ -1,9 +1,0 @@
-version = 0.1
-[default]
-[default.deploy]
-[default.deploy.parameters]
-stack_name = "sam-eventbridge-thai-food"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1fu356qim4goz"
-s3_prefix = "sam-eventbridge-thai-food"
-region = "eu-west-1"
-capabilities = "CAPABILITY_IAM"
