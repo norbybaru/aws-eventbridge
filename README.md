@@ -12,6 +12,7 @@ EventBridge is directly integrated with over 130 event sources and over 35 targe
 
 Infrastructure as code framework using AWS SAM
 
+![AWS EventBridge Architecture](./eventbridge_diagram.png)
 ## EventBridge Features
 - Advanced event rules filtering.
 - Content-based event filtering.
