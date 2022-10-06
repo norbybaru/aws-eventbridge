@@ -31,9 +31,9 @@ curl --location --request POST 'https://{AWS_API_GATEWAY_URL}/api/orders/create'
 ```
 
 ## Cleanup
-### Delete Stack
+### Destroy
 ```sh
-sam delete --stack-name STACK_NAME.
+sam destroy
 ```
 
 ### Confirm Stack been deleted

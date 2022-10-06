@@ -1,23 +1,20 @@
-# Getting Started with [Fastify-CLI](https://www.npmjs.com/package/fastify-cli)
-This project was bootstrapped with Fastify-CLI.
+# Create an EventBridge rule and API destination to route events to an external API and Setup Dead Letter Queue (DLQ)
 
-## Available Scripts
+This pattern configures an EventRule rule that routes to an API Destinations target. It configures a Connection, which contains the authorization for the API endpoint, and the API, which contains the URL, http method, and other configuration information.
 
-In the project directory, you can run:
+You could use https://webhook.site/ to test webhook as its a free service
+## Deploy
+```sh
+sam deploy --guide
+```
 
-### `npm run dev`
+## Cleanup
+### Destroy
+```sh
+sam delete
+```
 
-To start the app in dev mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-### `npm start`
-
-For production mode
-
-### `npm run test`
-
-Run the test cases.
-
-## Learn More
-
-To learn Fastify, check out the [Fastify documentation](https://www.fastify.io/docs/latest/).
+### Confirm Stack been deleted
+```sh
+ aws cloudformation list-stacks --query "StackSummaries[?contains(StackName,'STACK_NAME')].StackStatus"
+```

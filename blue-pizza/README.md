@@ -20,9 +20,9 @@ sam deploy --guide
 ```
 
 ## Cleanup
-### Delete Stack
+### Destroy
 ```sh
-sam delete --stack-name STACK_NAME.
+sam delete
 ```
 
 ### Confirm Stack been deleted
